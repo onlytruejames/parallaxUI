@@ -1,0 +1,3 @@
+[submodule "parallaxUI"]
+	path = parallaxUI
+	url = https://github.com/onlytruejames/parallaxUI
