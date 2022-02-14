@@ -1,6 +1,3 @@
-[submodule "parallaxUI"]
-	path = parallaxUI
-	url = https://github.com/onlytruejames/parallaxUI
 [submodule "parallaxCompiler"]
 	path = parallaxCompiler
 	url = https://github.com/onlytruejames/parallaxCompiler
