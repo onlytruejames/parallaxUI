@@ -16,5 +16,13 @@ def screen(data):
         return "Error"
     return parallaxCompiler.compile(json.loads(data))
 
+@app.route('/getKeywords/')
+def getKeywords():
+    return json.dumps(parallaxCompiler.getKeywords())
+
+@app.route('/getStrictKeywords/')
+def getStrictKeywords():
+    return json.dumps(parallaxCompiler.getStrictKeywords())
+
 if __name__ == '__main__':
     app.run()

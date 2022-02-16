@@ -1,43 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parallax Creator</title>
-    <style>
-        iframe{
-            width: 40%;
-            height: 90%;
-        }
-        body{
-            height: 100%;
-        }
-    </style>
+<title>ACE in Action</title>
+<style type="text/css" media="screen">
+    #editor { 
+        position: absolute;
+        width: 50%;
+        height: 100%;
+    }
+</style>
 </head>
 <body>
-    <script>
-        var data = [
-            {"content": [
-                {"text": "Hello world!"}
-            ]}
-        ]
 
-        var editor = document.getElementById("editor");
-        var frame = document.createElement("iframe");
-        frame.setAttribute("src", `/screen?data=${JSON.stringify(data)}`);
-        document.getElementsByTagName("body")[0].appendChild(frame);
-
-        function reloadFrame(){
-            frame.setAttribute("src", `/screen?data=${JSON.stringify(data)}`)
-        }
-
-        function getEditorData(){
-            data.children
-        }
-        
-    </script>
-
-    <div id="editor"></div>
+<div id="editor">[
+    
+]</div>
+    
+<script src="/static/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+</script>
 </body>
 </html>
