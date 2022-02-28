@@ -14,7 +14,10 @@ def screen(data):
     data = request.args.get('data')
     if not data:
         return "Error"
-    return parallaxCompiler.compile(json.loads(data))
+    try:
+        return parallaxCompiler.compile(json.loads(data))
+    except:
+        return "error"
 
 @app.route('/getKeywords/')
 def getKeywords():

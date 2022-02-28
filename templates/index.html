@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ACE in Action</title>
+<title>Parallax UI</title>
 <style type="text/css" media="screen">
-    #editor { 
+    #editor{ 
         position: absolute;
         width: 50%;
         height: 100%;
+    }
+</style>
+<style>
+    iframe{
+        float: right;
+        height: 100%;
+        width: 50%;
+    }
+    html{
+        height: 100vh;
+    }
+    body{
+        height: 100%;
+        margin: 0px;
     }
 </style>
 </head>
@@ -15,11 +29,33 @@
 <div id="editor">[
     
 ]</div>
-    
+
+<iframe src="" frameborder="0" id="iframe" height="75%"></iframe>
+
 <script src="/static/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
+    var iframe = document.getElementById("iframe");
+    
+    var prev = "";
+
+    function updateIframe(){
+        data = editor.getValue();
+        if (data !== prev){
+            prev = data;
+            xhr = new XMLHttpRequest();
+            xhr.open("GET", `/screen?data=${data}`);
+            xhr.addEventListener('load', event => {
+                if (xhr.responseText !== "error"){
+                    iframe.setAttribute("src", `/screen?data=${data}`);
+                }
+            })
+            xhr.send();
+        }
+    }
+
+    setInterval(updateIframe, 1000);
 </script>
 </body>
 </html>
