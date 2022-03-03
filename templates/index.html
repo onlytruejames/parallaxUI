@@ -7,14 +7,10 @@
         position: absolute;
         width: 50%;
         height: 100%;
+        left: 50%;
     }
 </style>
 <style>
-    iframe{
-        float: right;
-        height: 100%;
-        width: 50%;
-    }
     html{
         height: 100vh;
     }
@@ -30,10 +26,54 @@
     
 ]</div>
 
-<iframe src="" frameborder="0" id="iframe" height="75%"></iframe>
+<iframe src="" frameborder="0" id="iframe" height="75%" width="50%"></iframe>
+<div id="easyInput">
+    
+</div>
 
 <script src="/static/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    function placeButtons(keywords, specials){
+        console.log(keywords);
+        console.log(specials);
+        keywords.forEach(keyword => {
+            button = document.createElement("button");
+            key = Object.keys(keyword);
+            button.setAttribute("onclick", `addKeyword("${key}", "${keyword[key]}")`);
+            button.innerHTML = key;
+            document.getElementById("easyInput").appendChild(button);
+        });
+        specials.forEach(special => {
+            button = document.createElement("button");
+            button.setAttribute("onclick", `addKeyword("${special}", "special")`)
+        })
+    }
+
+    function addKeyword(key, type){
+        if (type === "dict"){
+            toAdd = `{"${key}": {}}`;
+        }else if (type === "str"){
+            toAdd = `{"${key}": ""}`;
+        }else if (type === "list"){
+            toAdd = `{"${key}": []}`
+        }
+        editor.insert(toAdd);
+    }
+
+    xhr = new XMLHttpRequest();
+    xhr.open("GET", "/getKeywords");
+    xhr.addEventListener('load', event => {
+        var keywords = JSON.parse(xhr.responseText);
+        xhr = new XMLHttpRequest();
+        xhr.open("GET", "/getSpecials");
+        xhr.addEventListener('load', event => {
+            var specials = JSON.parse(xhr.responseText);
+            placeButtons(keywords, specials);
+        });
+        xhr.send();
+    });
+    xhr.send();
+    
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
     var iframe = document.getElementById("iframe");
@@ -47,7 +87,7 @@
             xhr = new XMLHttpRequest();
             xhr.open("GET", `/screen?data=${data}`);
             xhr.addEventListener('load', event => {
-                if (xhr.responseText !== "error"){
+                if (xhr.responseText !== "error" && xhr.responseText !== "Error"){
                     iframe.setAttribute("src", `/screen?data=${data}`);
                 }
             })

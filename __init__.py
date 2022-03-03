@@ -27,5 +27,9 @@ def getKeywords():
 def getStrictKeywords():
     return json.dumps(parallaxCompiler.getStrictKeywords())
 
+@app.route('/getSpecials/')
+def getSpecials():
+    return json.dumps(parallaxCompiler.getSpecials())
+
 if __name__ == '__main__':
     app.run()
