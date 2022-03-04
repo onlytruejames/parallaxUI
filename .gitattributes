@@ -1,1 +1,2 @@
-/static/src/* linguist-vendored false
+/static/src/*.js linguist-vendored false
+/static/src/snippets/*.js linguist-vendored false
