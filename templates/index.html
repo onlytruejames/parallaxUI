@@ -22,17 +22,31 @@
 </head>
 <body>
 
-<div id="editor">[
-    
-]</div>
+{% if data %}
+    <div id="editor">{{data}}</div>
+{% endif %}
 
-<iframe src="" frameborder="0" id="iframe" height="75%" width="50%"></iframe>
+{% if not data %}
+    <div id="editor">[
+        
+]
+    </div>
+{% endif %}
+
+<iframe src="/screen" frameborder="0" id="iframe" height="75%" width="50%"></iframe>
 <div id="easyInput">
-    
+    <a href="/screen" download><button>Download page</button></a>
 </div>
 
 <script src="/static/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    function b64EncodeUnicode(str) {
+        // thanks to brandonscript on stackoverflow
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+            function toSolidBytes(match, p1) {
+                return String.fromCharCode('0x' + p1);
+        }));
+    }
     function placeButtons(keywords, specials){
         console.log(keywords);
         console.log(specials);
@@ -43,10 +57,11 @@
             button.innerHTML = key;
             document.getElementById("easyInput").appendChild(button);
         });
-        specials.forEach(special => {
+        /*specials.forEach(special => {
             button = document.createElement("button");
-            button.setAttribute("onclick", `addKeyword("${special}", "special")`)
-        })
+            button.setAttribute("onclick", `addKeyword("${special}", "special")`);
+            document.getElementById("easyInput").appendChild(button);
+        }); For some reason this doesn't work so it's just going to sit here until I remember it exists in (possibly) years*/
     }
 
     function addKeyword(key, type){
@@ -84,11 +99,13 @@
         data = editor.getValue();
         if (data !== prev){
             prev = data;
+            actualData = b64EncodeUnicode(data);
+            document.cookie = `data=${actualData}; path=/;`;
             xhr = new XMLHttpRequest();
-            xhr.open("GET", `/screen?data=${data}`);
+            xhr.open("GET", `/screen`);
             xhr.addEventListener('load', event => {
-                if (xhr.responseText !== "error" && xhr.responseText !== "Error"){
-                    iframe.setAttribute("src", `/screen?data=${data}`);
+                if (xhr.responseText !== "error"){
+                    iframe.contentWindow.location.reload();
                 }
             })
             xhr.send();

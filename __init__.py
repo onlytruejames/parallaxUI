@@ -1,19 +1,27 @@
 import parallaxCompiler.parallaxCompiler as parallaxCompiler
 from flask import Flask, render_template, request
-import json
+import json, base64
 
 app = Flask(__name__)
 
+def cleanUp(string):
+    return string.replace()
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    data = request.cookies.get('data')
+    data = base64.b64decode(data)
+    data = data.decode('utf-8')
+    return render_template('index.html', data=data)
 
-@app.route('/screen/', defaults = {"data": None})
-@app.route('/screen/<data>/')
-def screen(data):
-    data = request.args.get('data')
+@app.route('/screen/')
+@app.route('/screen/')
+def screen():
+    data = request.cookies.get('data')
+    data = base64.b64decode(data)
+    data = data.decode('utf-8')
     if not data:
-        return "Error"
+        return "error"
     try:
         return parallaxCompiler.compile(json.loads(data))
     except:
