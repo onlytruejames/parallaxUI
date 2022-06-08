@@ -47,6 +47,20 @@
                 return String.fromCharCode('0x' + p1);
         }));
     }
+    
+    function cookify(data){
+        actualData = b64EncodeUnicode(data);
+        cookieAmount = Math.ceil(actualData.length / 4000);
+        dataCookies = []
+        for (i = 0; i < cookieAmount; i++){
+            dataCookies.push(`c${i}=${actualData.slice(0 + (i * 4000), 4000 + (i * 4000))};`);
+        }
+        document.cookie = `num=${cookieAmount}; path=/;`;
+        for (cookie in dataCookies){
+            document.cookie = `${dataCookies[cookie]}; path=/;`
+        }
+    }
+
     function placeButtons(keywords, specials){
         console.log(keywords);
         console.log(specials);
@@ -99,8 +113,7 @@
         data = editor.getValue();
         if (data !== prev){
             prev = data;
-            actualData = b64EncodeUnicode(data);
-            document.cookie = `data=${actualData}; path=/;`;
+            cookify(data);
             xhr = new XMLHttpRequest();
             xhr.open("GET", `/screen`);
             xhr.addEventListener('load', event => {

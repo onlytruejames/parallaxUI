@@ -1,25 +1,41 @@
+from ast import Num
 import parallaxCompiler.parallaxCompiler as parallaxCompiler
 from flask import Flask, render_template, request
 import json, base64
 
-app = Flask(__name__)
+def putCookieBackTogether(cookie: list) -> str:
+    result = ""
+    for subCookie in cookie:
+        result += subCookie
+    return base64.b64decode(result).decode('utf-8')
 
-def cleanUp(string):
-    return string.replace()
+app = Flask(__name__)
 
 @app.route('/')
 def index():
-    data = request.cookies.get('data')
-    data = base64.b64decode(data)
-    data = data.decode('utf-8')
+    try:
+        num = int(request.cookies.get('num'))
+        print(num)
+        cookies = []
+        for i in range(num):
+            cookies.append(request.cookies.get(f"c{i}"))
+        data = putCookieBackTogether(cookies)
+    except:
+        data = "[]"
     return render_template('index.html', data=data)
 
 @app.route('/screen/')
 @app.route('/screen/')
 def screen():
-    data = request.cookies.get('data')
-    data = base64.b64decode(data)
-    data = data.decode('utf-8')
+    try:
+        num = int(request.cookies.get('num'))
+        print(num)
+        cookies = []
+        for i in range(num):
+            cookies.append(request.cookies.get(f"c{i}"))
+        data = putCookieBackTogether(cookies)
+    except:
+        data = "[]"
     if not data:
         return "error"
     try:
